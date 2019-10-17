@@ -157,7 +157,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   }
 
   findOrCreateHighlightLayer(page: number) {
-    const textLayer = this.viewer.getPageView(page).textLayer;
+    const textLayer = this.viewer.getPageView(page - 1).textLayer;
 
     if (!textLayer) {
       return null;
@@ -208,7 +208,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     rects,
     usePdfCoordinates
   }: T_ScaledPosition): T_Position {
-    const viewport = this.viewer.getPageView(pageNumber).viewport;
+    const viewport = this.viewer.getPageView(pageNumber - 1).viewport;
 
     return {
       boundingRect: scaledToViewport(boundingRect, viewport, usePdfCoordinates),
@@ -224,7 +224,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     boundingRect,
     rects
   }: T_Position): T_ScaledPosition {
-    const viewport = this.viewer.getPageView(pageNumber).viewport;
+    const viewport = this.viewer.getPageView(pageNumber - 1).viewport;
 
     return {
       boundingRect: viewportToScaled(boundingRect, viewport),
@@ -234,7 +234,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   }
 
   screenshot(position: T_LTWH, pageNumber: number) {
-    const canvas = this.viewer.getPageView(pageNumber).canvas;
+    const canvas = this.viewer.getPageView(pageNumber - 1).canvas;
 
     return getAreaAsPng(canvas, position);
   }
@@ -283,7 +283,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
                   },
                   this.hideTipAndSelection,
                   rect => {
-                    const viewport = this.viewer.getPageView(pageNumber)
+                    const viewport = this.viewer.getPageView(pageNumber - 1)
                       .viewport;
 
                     return viewportToScaled(rect, viewport);
@@ -317,7 +317,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     const { boundingRect, pageNumber } = position;
 
     const page = {
-      node: this.viewer.getPageView(pageNumber).div
+      node: this.viewer.getPageView(pageNumber - 1).div
     };
 
     const pageBoundingRect = page.node.getBoundingClientRect();
@@ -352,7 +352,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
 
     this.viewer.container.removeEventListener("scroll", this.onScroll);
 
-    const pageViewport = this.viewer.getPageView(pageNumber).viewport;
+    const pageViewport = this.viewer.getPageView(pageNumber - 1).viewport;
 
     const scrollMargin = 10;
 
