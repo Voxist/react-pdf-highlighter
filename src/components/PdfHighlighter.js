@@ -4,6 +4,7 @@ import ReactDom from "react-dom";
 import Pointable from "react-pointable";
 import _ from "lodash/fp";
 import { PDFViewer, PDFLinkService } from "pdfjs-dist/web/pdf_viewer";
+import { PDFSinglePageViewer } from "pdfjs-dist/lib/web/pdf_single_page_viewer";
 
 import "pdfjs-dist/web/pdf_viewer.css";
 import "../style/pdf_viewer.css";
@@ -75,7 +76,8 @@ type Props<T_HT> = {
     hideTipAndSelection: () => void,
     transformSelection: () => void
   ) => ?React$Element<*>,
-  enableAreaSelection: (event: MouseEvent) => boolean
+  enableAreaSelection: (event: MouseEvent) => boolean,
+  page: number
 };
 
 const EMPTY_ID = "empty-id";
@@ -105,7 +107,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
 
   componentDidUpdate(prevProps: Props<T_HT>) {
     if (prevProps.highlights !== this.props.highlights) {
-      this.renderHighlights(this.props)
+      this.renderHighlights(this.props);
     }
   }
 
@@ -115,7 +117,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     this.debouncedAfterSelection = _.debounce(500, this.afterSelection);
     this.linkService = new PDFLinkService();
 
-    this.viewer = new PDFViewer({
+    this.viewer = new PDFSinglePageViewer({
       container: this.containerNode,
       enhanceTextSelection: true,
       removePageBorders: true,
@@ -507,7 +509,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         <div
           ref={node => (this.containerNode = node)}
           className="PdfHighlighter"
-          onContextMenu={(e) => e.preventDefault()}
+          onContextMenu={e => e.preventDefault()}
         >
           <div className="pdfViewer" />
           {typeof enableAreaSelection === "function" ? (
