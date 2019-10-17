@@ -156,7 +156,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         this.onTextLayerRendered
       );
   }
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props<T_HT>) {
     if (nextProps.pageNumber !== this.props.pageNumber) {
       if (
         this.viewer.viewer &&
@@ -169,6 +169,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
           index++
         ) {
           const element = this.viewer.viewer.childNodes[index];
+          // $FlowFixMe
           element.remove();
         }
       }
