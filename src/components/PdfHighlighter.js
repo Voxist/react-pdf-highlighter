@@ -76,8 +76,7 @@ type Props<T_HT> = {
     hideTipAndSelection: () => void,
     transformSelection: () => void
   ) => ?React$Element<*>,
-  enableAreaSelection: (event: MouseEvent) => boolean,
-  page: number
+  enableAreaSelection: (event: MouseEvent) => boolean
 };
 
 const EMPTY_ID = "empty-id";
