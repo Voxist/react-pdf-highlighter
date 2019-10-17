@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.10",
-    "pdfjs-dist": "2.0.489",
+    "pdfjs-dist": "2.2.228",
     "react-pointable": "^1.1.1",
     "react-rnd": "^7.1.5"
   },
@@ -28,6 +28,7 @@
     "react-dom": ">=0.14"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.6.3",
     "flow-bin": "0.73.0",
     "flow-copy-source": "^1.1.0",
     "gh-pages": "0.11.0",
