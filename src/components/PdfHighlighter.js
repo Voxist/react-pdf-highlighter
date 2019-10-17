@@ -76,7 +76,8 @@ type Props<T_HT> = {
     hideTipAndSelection: () => void,
     transformSelection: () => void
   ) => ?React$Element<*>,
-  enableAreaSelection: (event: MouseEvent) => boolean
+  enableAreaSelection: (event: MouseEvent) => boolean,
+  pageNumber: number
 };
 
 const EMPTY_ID = "empty-id";
@@ -154,6 +155,25 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         "textlayerrendered",
         this.onTextLayerRendered
       );
+  }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.pageNumber !== this.props.pageNumber) {
+      if (
+        this.viewer.viewer &&
+        this.viewer.viewer.childNodes &&
+        this.viewer.viewer.childNodes.length > 1
+      ) {
+        for (
+          let index = 1;
+          index < this.viewer.viewer.childNodes.length;
+          index++
+        ) {
+          const element = this.viewer.viewer.childNodes[index];
+          element.remove();
+        }
+      }
+      this.viewer.currentPageNumber = nextProps.pageNumber;
+    }
   }
 
   findOrCreateHighlightLayer(page: number) {
