@@ -408,6 +408,8 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     const { scrollRef, pageNumber } = this.props;
 
     this.viewer.currentScaleValue = "auto";
+    console.log(pageNumber, typeof pageNumber);
+
     if (pageNumber > 1) {
       if (
         this.viewer.viewer &&
