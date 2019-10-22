@@ -77,7 +77,8 @@ type Props<T_HT> = {
     transformSelection: () => void
   ) => ?React$Element<*>,
   enableAreaSelection: (event: MouseEvent) => boolean,
-  pageNumber: number
+  pageNumber: number,
+  scale: number
 };
 
 const EMPTY_ID = "empty-id";
@@ -112,7 +113,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   }
 
   componentDidMount() {
-    const { pdfDocument, pageNumber } = this.props;
+    const { pdfDocument, pageNumber, scale } = this.props;
 
     this.debouncedAfterSelection = _.debounce(500, this.afterSelection);
     this.linkService = new PDFLinkService();
@@ -162,6 +163,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
       }
       // $FlowFixMe
       this.viewer._currentPageNumber = pageNumber;
+      this.viewer.currentScaleValue = scale;
     }
   }
 
@@ -193,6 +195,9 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         }
       }
       this.viewer.currentPageNumber = nextProps.pageNumber;
+    }
+    if (nextProps.scale !== this.props.scale) {
+      this.viewer.currentScaleValue = nextProps.scale;
     }
   }
 
@@ -424,9 +429,9 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   };
 
   onDocumentReady = () => {
-    const { scrollRef, pageNumber } = this.props;
+    const { scrollRef, pageNumber, scale } = this.props;
 
-    this.viewer.currentScaleValue = "auto";
+    this.viewer.currentScaleValue = scale;
 
     scrollRef(this.scrollTo);
   };

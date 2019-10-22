@@ -133,6 +133,7 @@ class App extends Component<Props, State> {
           <PdfLoader url={url} beforeLoad={<Spinner />}>
             {pdfDocument => (
               <PdfHighlighter
+                scale={1}
                 pageNumber={1}
                 pdfDocument={pdfDocument}
                 enableAreaSelection={event => event.altKey}
