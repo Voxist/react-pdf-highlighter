@@ -144,6 +144,25 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         "textlayerrendered",
         this.onTextLayerRendered
       );
+    if (pageNumber > 1) {
+      if (
+        this.viewer.viewer &&
+        this.viewer.viewer.childNodes &&
+        this.viewer.viewer.childNodes.length > 1
+      ) {
+        for (
+          let index = 1;
+          index < this.viewer.viewer.childNodes.length;
+          index++
+        ) {
+          const element = this.viewer.viewer.childNodes[index];
+          // $FlowFixMe
+          element.remove();
+        }
+      }
+      // $FlowFixMe
+      this.viewer._currentPageNumber = pageNumber;
+    }
   }
 
   componentWillUnmount() {
@@ -408,26 +427,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
     const { scrollRef, pageNumber } = this.props;
 
     this.viewer.currentScaleValue = "auto";
-    console.log(pageNumber, typeof pageNumber);
 
-    if (pageNumber > 1) {
-      if (
-        this.viewer.viewer &&
-        this.viewer.viewer.childNodes &&
-        this.viewer.viewer.childNodes.length > 1
-      ) {
-        for (
-          let index = 1;
-          index < this.viewer.viewer.childNodes.length;
-          index++
-        ) {
-          const element = this.viewer.viewer.childNodes[index];
-          // $FlowFixMe
-          element.remove();
-        }
-      }
-      this.viewer.currentPageNumber = pageNumber;
-    }
     scrollRef(this.scrollTo);
   };
 
