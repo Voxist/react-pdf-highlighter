@@ -112,7 +112,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   }
 
   componentDidMount() {
-    const { pdfDocument } = this.props;
+    const { pdfDocument, pageNumber } = this.props;
 
     this.debouncedAfterSelection = _.debounce(500, this.afterSelection);
     this.linkService = new PDFLinkService();
@@ -144,6 +144,24 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         "textlayerrendered",
         this.onTextLayerRendered
       );
+    if (pageNumber > 1) {
+      if (
+        this.viewer.viewer &&
+        this.viewer.viewer.childNodes &&
+        this.viewer.viewer.childNodes.length > 1
+      ) {
+        for (
+          let index = 1;
+          index < this.viewer.viewer.childNodes.length;
+          index++
+        ) {
+          const element = this.viewer.viewer.childNodes[index];
+          // $FlowFixMe
+          element.remove();
+        }
+      }
+      this.viewer.currentPageNumber = pageNumber;
+    }
   }
 
   componentWillUnmount() {
