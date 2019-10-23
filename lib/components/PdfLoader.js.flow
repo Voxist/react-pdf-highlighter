@@ -9,7 +9,8 @@ import pdfjs from "pdfjs-dist/webpack";
 type Props = {
   url: string,
   beforeLoad: React$Element<*>,
-  children: (pdfDocument: T_PDFJS_Document) => React$Element<*>
+  children: (pdfDocument: T_PDFJS_Document) => React$Element<*>,
+  setPdfDoc?: (pdfDocument: T_PDFJS_Document) => void
 };
 
 type State = {
@@ -22,9 +23,12 @@ class PdfLoader extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { url } = this.props;
+    const { url, setPdfDoc } = this.props;
 
     pdfjs.getDocument(url).promise.then(pdfDocument => {
+      if (setPdfDoc) {
+        setPdfDoc(pdfDocument);
+      }
       this.setState({
         pdfDocument: pdfDocument
       });

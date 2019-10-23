@@ -78,7 +78,8 @@ type Props<T_HT> = {
   ) => ?React$Element<*>,
   enableAreaSelection: (event: MouseEvent) => boolean,
   pageNumber: number,
-  scale: number
+  scale: number,
+  setViewer?: (viewer: T_PDFJS_Viewer) => void
 };
 
 const EMPTY_ID = "empty-id";
@@ -113,7 +114,7 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
   }
 
   componentDidMount() {
-    const { pdfDocument, pageNumber, scale } = this.props;
+    const { pdfDocument, pageNumber, scale, setViewer } = this.props;
 
     this.debouncedAfterSelection = _.debounce(500, this.afterSelection);
     this.linkService = new PDFLinkService();
@@ -145,6 +146,9 @@ class PdfHighlighter<T_HT: T_Highlight> extends PureComponent<
         "textlayerrendered",
         this.onTextLayerRendered
       );
+    if (setViewer) {
+      setViewer(this.viewer);
+    }
     if (pageNumber > 1) {
       if (
         this.viewer.viewer &&
